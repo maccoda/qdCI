@@ -1,4 +1,7 @@
 # qdCI
+[![BuildStatus](https://travis-ci.org/maccoda/qdCI.svg?branch=master)](https://travis-ci.org/maccoda/qdCI)
+[![GitHub tag](https://img.shields.io/github/tag/maccoda/qdCI.svg?maxAge=2592000)]()
+
 A quick and dirty CI tool.
 
 Then check the irony that this has got a build badge from
