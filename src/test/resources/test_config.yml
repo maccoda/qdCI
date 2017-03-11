@@ -1,0 +1,10 @@
+beforeBuild:
+  - ls
+
+build:
+  - touch test.txt
+  - cat test.txt
+
+afterBuild:
+  - cat test.txt
+  - rm test.txt

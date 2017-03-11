@@ -1,0 +1,35 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'jacoco'
+
+// Add dependencies for unit test
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+    compile group: 'org.yaml', name:'snakeyaml', version: '1.18'
+}
+
+/* Could also use the same thing for a local file it would look like:
+ * dependencies {
+ *  compile files('<realtive_path>')
+ *}
+ */
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'main.java.Driver'
+        )
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled false
+    }
+}
