@@ -14,9 +14,9 @@ public class TestBuildExecutor {
 
     @Test
     public void testConstructor() {
-        BuildExecutor builder = new BuildExecutor("src/test/resources/test_config.yml");
+        BuildExecutor builder = new BuildExecutor(System.getProperty("user.dir") + "/src/test/resources/test_config.yml");
         assertEquals(builder.getBeforeBuildSteps(), Arrays.asList("ls"));
-        assertEquals(builder.getBuildSteps(), Arrays.asList("echo \"Hello there\" > test.txt", "cat test.txt"));
-        assertEquals(builder.getAfterBuildSteps(), Arrays.asList(("cat test.txt")));
+        assertEquals(builder.getBuildSteps(), Arrays.asList("touch test.txt", "cat test.txt"));
+        assertEquals(builder.getAfterBuildSteps(), Arrays.asList("cat test.txt", "rm test.txt"));
     }
 }
