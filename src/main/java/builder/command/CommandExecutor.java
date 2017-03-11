@@ -1,4 +1,4 @@
-package builder;
+package builder.command;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,3 +1,5 @@
+package builder;
+
 import builder.BuildExecutor;
 import org.junit.Test;
 
@@ -8,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by dmaccora on 11/03/17.
  */
-public class TestCiBuild {
+public class TestBuildExecutor {
 
     @Test
     public void testConstructor() {

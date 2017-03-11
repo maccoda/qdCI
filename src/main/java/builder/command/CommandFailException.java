@@ -1,4 +1,4 @@
-package builder;
+package builder.command;
 
 /**
  * Created by dmaccora on 11/03/17.

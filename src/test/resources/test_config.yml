@@ -1,7 +1,7 @@
 beforeBuild:
   - ls
 
-builder:
+build:
   - touch test.txt
   - cat test.txt
 
