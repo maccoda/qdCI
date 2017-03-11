@@ -1,8 +1,9 @@
+package builder;
+
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 /**
  * Created by dmaccora on 11/03/17.
  */
-public class CiBuild {
+public class BuildExecutor {
 
     private BuildConfig buildConfig;
 
@@ -22,7 +23,7 @@ public class CiBuild {
      *
      * @param path - path of config
      */
-    public CiBuild(String path) {
+    public BuildExecutor(String path) {
         try {
             byte[] encoded = Files.readAllBytes(Paths.get(path));
             String yamlContent = new String(encoded, Charset.defaultCharset());
@@ -35,28 +36,44 @@ public class CiBuild {
         }
     }
 
+    /**
+     * Execute the beforeBuild section of the {@link BuildConfig}
+     * @throws CommandFailException - thrown when one of the tasks fails
+     */
     public void executeBeforeBuild() throws CommandFailException {
         executeTasks(buildConfig.getBeforeBuild());
     }
-
+    /**
+     * Execute the builder section of the {@link BuildConfig}
+     * @throws CommandFailException - thrown when one of the tasks fails
+     */
     public void executeBuild() throws CommandFailException {
         executeTasks(buildConfig.getBuild());
     }
-
+    /**
+     * Execute the afterBuild section of the {@link BuildConfig}
+     * @throws CommandFailException - thrown when one of the tasks fails
+     */
     public void executeAfterBuild() throws CommandFailException {
         executeTasks(buildConfig.getAfterBuild());
     }
 
+    /**
+     * Given a list of tasks this will convert to {@link CommandExecutor} and execute.
+     * @param tasks to execute
+     * @throws CommandFailException - thrown when a task was not executed successfully.
+     */
     private void executeTasks(List<String> tasks) throws CommandFailException {
         List<CommandExecutor> cmds = buildCommands(tasks);
-        for (CommandExecutor cmd:cmds) {
+        for (CommandExecutor cmd: cmds) {
             try {
                 int exitCode = cmd.execute();
+                System.out.println(cmd.getSysOut());
                 if (exitCode != 0) {
-                    throw new CommandFailException(exitCode);
+                    throw new CommandFailException(cmd.getTask(), exitCode);
                 }
             } catch (IOException|InterruptedException e) {
-                throw new CommandFailException();
+                throw new CommandFailException(cmd.getTask());
             }
         }
     }

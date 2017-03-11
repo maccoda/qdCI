@@ -1,15 +1,20 @@
+package builder;
+
 /**
  * Created by dmaccora on 11/03/17.
  */
 public class CommandFailException extends Exception {
 
     private int exitCode;
+    private String command;
 
-    public CommandFailException() {
+    public CommandFailException(String aCommand) {
+        command = aCommand;
         exitCode = -100;
     }
 
-    public CommandFailException(int aExitCode) {
+    public CommandFailException(String aCommand, int aExitCode) {
+        command = aCommand;
         exitCode = aExitCode;
     }
 
@@ -19,5 +24,9 @@ public class CommandFailException extends Exception {
         } else {
             return "Failed with exit code " + exitCode;
         }
+    }
+
+    public String getFailTask() {
+        return command;
     }
 }

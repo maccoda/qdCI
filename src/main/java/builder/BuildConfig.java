@@ -1,3 +1,5 @@
+package builder;
+
 import java.util.List;
 
 public class BuildConfig {
@@ -31,6 +33,6 @@ public class BuildConfig {
 
     @Override
     public String toString() {
-        return "beforeBuild: " + beforeBuild + " build " + build + " afterBuild" + afterBuild;
+        return "beforeBuild: " + beforeBuild + " builder " + build + " afterBuild" + afterBuild;
     }
 }

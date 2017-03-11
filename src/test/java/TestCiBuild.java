@@ -1,3 +1,4 @@
+import builder.BuildExecutor;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -11,7 +12,7 @@ public class TestCiBuild {
 
     @Test
     public void testConstructor() {
-        CiBuild builder = new CiBuild("src/test/resources/test_config.yml");
+        BuildExecutor builder = new BuildExecutor("src/test/resources/test_config.yml");
         assertEquals(builder.getBeforeBuildSteps(), Arrays.asList("ls"));
         assertEquals(builder.getBuildSteps(), Arrays.asList("echo \"Hello there\" > test.txt", "cat test.txt"));
         assertEquals(builder.getAfterBuildSteps(), Arrays.asList(("cat test.txt")));
