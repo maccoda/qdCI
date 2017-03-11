@@ -1,0 +1,9 @@
+beforeBuild:
+  - ls
+
+build:
+  - echo "Hello there" > test.txt
+  - cat test.txt
+
+afterBuild:
+  - cat test.txt
