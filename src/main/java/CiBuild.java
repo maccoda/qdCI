@@ -2,10 +2,13 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by dmaccora on 11/03/17.
@@ -16,6 +19,7 @@ public class CiBuild {
 
     /**
      * Loads up the {@link BuildConfig} at the specified path.
+     *
      * @param path - path of config
      */
     public CiBuild(String path) {
@@ -31,15 +35,45 @@ public class CiBuild {
         }
     }
 
-    public List<String> getBeforeBuildSteps() {
+    public void executeBeforeBuild() throws CommandFailException {
+        executeTasks(buildConfig.getBeforeBuild());
+    }
+
+    public void executeBuild() throws CommandFailException {
+        executeTasks(buildConfig.getBuild());
+    }
+
+    public void executeAfterBuild() throws CommandFailException {
+        executeTasks(buildConfig.getAfterBuild());
+    }
+
+    private void executeTasks(List<String> tasks) throws CommandFailException {
+        List<CommandExecutor> cmds = buildCommands(tasks);
+        for (CommandExecutor cmd:cmds) {
+            try {
+                int exitCode = cmd.execute();
+                if (exitCode != 0) {
+                    throw new CommandFailException(exitCode);
+                }
+            } catch (IOException|InterruptedException e) {
+                throw new CommandFailException();
+            }
+        }
+    }
+
+    private List<CommandExecutor> buildCommands(List<String> commands) {
+        return commands.stream().map(x -> new CommandExecutor(Arrays.asList(x.split(" ")))).collect(Collectors.toList());
+    }
+
+    List<String> getBeforeBuildSteps() {
         return buildConfig.getBeforeBuild();
     }
 
-    public List<String> getBuildSteps() {
+    List<String> getBuildSteps() {
         return buildConfig.getBuild();
     }
 
-    public List<String> getAfterBuildSteps() {
+    List<String> getAfterBuildSteps() {
         return buildConfig.getAfterBuild();
     }
 }
